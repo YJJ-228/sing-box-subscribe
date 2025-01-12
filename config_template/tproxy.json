@@ -16,22 +16,17 @@
     }
   },
   "dns": {
-    "fakeip": {
-      "enabled": true,
-      "inet4_range": "198.18.0.0/15",
-      "inet6_range": "fc00::/18"
-    },
     "servers": [
       {
         "tag": "block-dns",
         "address": "rcode://refused"
       },
       {
-        "tag": "google",
+        "tag": "proxy-dns",
         "address": "tls://8.8.8.8"
       },
       {
-        "tag": "local",
+        "tag": "local-dns",
         "address": "https://223.5.5.5/dns-query",
         "detour": "direct"
       },
@@ -42,59 +37,54 @@
     ],
     "rules": [
       {
+        "rule_set": "block",
+        "server": "block-dns"
+      },
+      {
         "outbound": "any",
-        "server": "local"
+        "server": "local-dns"
       },
       {
         "clash_mode": "direct",
-        "server": "local"
+        "server": "local-dns"
       },
       {
         "clash_mode": "global",
-        "server": "google"
+        "server": "proxy-dns"
+      },
+      {
+        "query_type": "HTTPS",
+        "rule_set": "proxy",
+        "server": "block-dns"
       },
       {
         "query_type": ["A", "AAAA"],
-        "rule_set": "geosite-cn",
+        "rule_set": "proxy",
         "server": "fakeip"
       },
       {
-        "rule_set": "geosite-cn",
-        "server": "local"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "rule_set": "geosite-geolocation-!cn",
-            "invert": true
-          },
-          {
-            "rule_set": "geoip-cn"
-          }
-        ],
-        "server": "google",
-        "client_subnet": "114.114.114.114/24"
-      },
-      {
-        "query_type": ["A", "AAAA"],
-        "server": "fakeip"
+        "query_type": "AAAA",
+        "client_subnet": "223.167.89.93/24",
+        "server": "local-dns"
       }
     ],
+    "final": "local-dns",
     "independent_cache": true,
-    "strategy": "prefer_ipv4"
+    "fakeip": {
+      "enabled": true,
+      "inet4_range": "198.18.0.0/15",
+      "inet6_range": "fc00::/18"
+    }
   },
   "inbounds": [
     {
       "tag": "tun-in",
       "type": "tun",
-      "address": ["172.19.0.0/30", "fdfe:dcba:9876::0/126"],
-      "stack": "system",
-      "sniff": true,
+      "interface_name": "sing-box",
+      "address": ["172.19.0.1/30", "fdfe:dcba:9876::1/126"],
       "gso": true,
       "auto_route": true,
-      "strict_route": true,
+      "stack": "system",
       "route_address": [
         "198.18.0.0/15",
         "fc00::/18",
@@ -123,7 +113,7 @@
     {
       "tag": "proxy",
       "type": "selector",
-      "outbounds": ["auto", "direct", "{all}"]
+      "outbounds": ["auto", "direct-out", "{all}"]
     },
     {
       "tag": "auto",
@@ -134,8 +124,13 @@
       "tolerance": 50
     },
     {
-      "type": "direct",
-      "tag": "direct"
+      "tag": "direct",
+      "type": "selector",
+      "outbounds": ["direct-out", "proxy"]
+    },
+    {
+      "tag": "direct-out",
+      "type": "direct"
     },
     {
       "tag": "dns-out",
@@ -147,39 +142,72 @@
       "outbounds": ["block-out", "proxy", "direct"]
     },
     {
+      "tag": "final",
+      "type": "selector",
+      "outbounds": ["direct-out", "proxy"]
+    },
+    {
       "tag": "block-out",
       "type": "block"
     },
     {
       "tag": "OpenAI",
       "type": "selector",
-      "outbounds": ["TaiWan", "Singapore", "Japan", "America"],
+      "outbounds": ["proxy", "TaiWan", "Singapore", "Japan", "America"],
       "default": "America"
     },
     {
       "tag": "Google",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"]
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ]
     },
     {
       "tag": "Telegram",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"]
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ]
     },
     {
       "tag": "Twitter",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"]
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ]
     },
     {
       "tag": "Facebook",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"]
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ]
     },
     {
       "tag": "BiliBili",
       "type": "selector",
-      "outbounds": ["direct", "HongKong", "TaiWan"]
+      "outbounds": ["direct", "proxy"]
     },
     {
       "tag": "Bahamut",
@@ -189,30 +217,59 @@
     {
       "tag": "Spotify",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"],
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ],
       "default": "America"
     },
     {
       "tag": "TikTok",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"],
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ],
       "default": "Japan"
     },
     {
       "tag": "Netflix",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"]
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ]
     },
     {
       "tag": "Disney+",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"]
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ]
     },
     {
       "tag": "Apple",
       "type": "selector",
       "outbounds": [
         "direct",
+        "proxy",
         "HongKong",
         "TaiWan",
         "Singapore",
@@ -225,6 +282,7 @@
       "type": "selector",
       "outbounds": [
         "direct",
+        "proxy",
         "HongKong",
         "TaiWan",
         "Singapore",
@@ -237,6 +295,7 @@
       "type": "selector",
       "outbounds": [
         "direct",
+        "proxy",
         "HongKong",
         "TaiWan",
         "Singapore",
@@ -247,7 +306,14 @@
     {
       "tag": "Streaming",
       "type": "selector",
-      "outbounds": ["HongKong", "TaiWan", "Singapore", "Japan", "America"]
+      "outbounds": [
+        "proxy",
+        "HongKong",
+        "TaiWan",
+        "Singapore",
+        "Japan",
+        "America"
+      ]
     },
     {
       "tag": "China",
@@ -297,7 +363,7 @@
   ],
   "route": {
     "auto_detect_interface": true,
-    "final": "proxy",
+    "final": "final",
     "rule_set": [
       {
         "tag": "block",
