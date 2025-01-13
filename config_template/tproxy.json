@@ -30,7 +30,7 @@
             },
             {
                 "clash_mode": "direct",
-                "server": "local-dns"
+                "server": "ali-dns"
             },
             {
                 "rule_set": [
