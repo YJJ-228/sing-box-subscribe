@@ -147,8 +147,7 @@
             "type": "selector",
             "outbounds": [
                 "direct-out",
-                "proxy",
-                "sg"
+                "proxy"
             ]
         },
         {
