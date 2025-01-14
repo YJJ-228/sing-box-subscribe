@@ -154,7 +154,7 @@
             "tag": "proxy",
             "type": "selector",
             "outbounds": [
-                "{auto}",
+                "auto",
                 "{all}",
                 "direct-out"
             ]
