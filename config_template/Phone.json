@@ -103,7 +103,7 @@
         "rules": [
             {
                 "port": 53,
-                "outbound": "dns-out"
+                "action": "hijack-dns"
             },
             {
                 "rule_set": "block",
@@ -179,10 +179,6 @@
         {
             "tag": "direct-out",
             "type": "direct"
-        },
-        {
-            "tag": "dns-out",
-            "type": "dns"
         },
         {
             "tag": "HongKong",
