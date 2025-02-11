@@ -59,7 +59,7 @@
     "rules": [
       {
         "rule_set": "block",
-        "outbound": "block"
+        "action": "reject"
       },
       {
         "rule_set": [
@@ -123,20 +123,8 @@
       ]
     },
     {
-      "tag": "block",
-      "type": "selector",
-      "outbounds": [
-        "block-out",
-        "proxy"
-      ]
-    },
-    {
       "tag": "direct-out",
       "type": "direct"
-    },
-    {
-      "tag": "block-out",
-      "type": "block"
     },
     {
       "tag": "dns-out",
