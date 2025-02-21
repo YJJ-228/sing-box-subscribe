@@ -13,10 +13,6 @@
             {
                 "tag": "fakeip",
                 "address": "fakeip"
-            },
-            {
-                "tag": "block-dns",
-                "address": "rcode://success"
             }
         ],
         "rules": [
@@ -26,7 +22,13 @@
             },
             {
                 "rule_set": "block",
-                "server": "block-dns"
+                "action": "reject"
+            },
+            {
+                "query_type": "HTTPS",
+                "rule_set": "proxy",
+                "server": "block-dns",
+                "action": "reject"
             },
             {
                 "clash_mode": "direct",
@@ -40,11 +42,6 @@
                 "server": "ali-dns"
             },
             {
-                "query_type": "HTTPS",
-                "rule_set": "proxy",
-                "server": "block-dns"
-            },
-            {
                 "query_type": [
                     "A",
                     "AAAA"
@@ -53,6 +50,7 @@
                 "server": "fakeip"
             },
             {
+                "action": "route-options",
                 "query_type": "AAAA",
                 "client_subnet": "223.167.89.93/24",
                 "server": "ali-dns"
@@ -113,11 +111,11 @@
         "rules": [
             {
                 "port": 53,
-                "outbound": "dns-out"
+                "action": "hijack-dns"
             },
             {
                 "rule_set": "block",
-                "outbound": "block"
+                "action": "reject"
             },
             {
                 "clash_mode": "direct",
