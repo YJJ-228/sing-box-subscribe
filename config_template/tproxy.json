@@ -239,7 +239,7 @@
                 {
                     "action": "include",
                     "keywords": [
-                        "🇭🇰|HK|hk|香港|港|HongKong"
+                        "🇭🇰|HK|hk|香港 | 港|HongKong"
                     ]
                 }
             ]
@@ -254,7 +254,7 @@
                 {
                     "action": "include",
                     "keywords": [
-                        "🇹🇼|TW|tw|台湾|臺灣|台|Taiwan"
+                        "🇹🇼|TW|tw|台湾 | 臺灣 | 台|Taiwan"
                     ]
                 }
             ]
@@ -269,7 +269,7 @@
                 {
                     "action": "include",
                     "keywords": [
-                        "🇸🇬|SG|sg|新加坡|狮|Singapore"
+                        "🇸🇬|SG|sg|新加坡 | 狮|Singapore"
                     ]
                 }
             ]
@@ -284,7 +284,7 @@
                 {
                     "action": "include",
                     "keywords": [
-                        "🇯🇵|JP|jp|日本|日|Japan"
+                        "🇯🇵|JP|jp|日本 | 日|Japan"
                     ]
                 }
             ]
@@ -299,7 +299,7 @@
                 {
                     "action": "include",
                     "keywords": [
-                        "🇺🇸|US|us|美国|美|United States"
+                        "🇺🇸|US|us|美国 | 美|United States"
                     ]
                 }
             ]
@@ -314,7 +314,7 @@
                 {
                     "action": "exclude",
                     "keywords": [
-                        "🇭🇰|HK|hk|香港|香|🇹🇼|TW|tw|台湾|台|🇸🇬|SG|sg|新加坡|狮|🇯🇵|JP|jp|日本|日|🇺🇸|US|us|美国|美"
+                        "🇭🇰|HK|hk|香港 | 香|🇹🇼|TW|tw|台湾 | 台|🇸🇬|SG|sg|新加坡 | 狮|🇯🇵|JP|jp|日本 | 日|🇺🇸|US|us|美国 | 美"
                     ]
                 }
             ]
@@ -328,9 +328,9 @@
         },
         "clash_api": {
             "external_controller": "0.0.0.0:9090",
-            "external_ui": "yacd",
-            "external_ui_download_url": "",
-            "external_ui_download_detour": "proxy"
+            "external_ui": "zashboard",
+            "external_ui_download_detour": "proxy",
+            "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip"
         }
     }
 }
