@@ -108,7 +108,8 @@
             {
                 "rule_set": [
                     "direct",
-                    "steam"
+                    "steam",
+                    "cn-ips"
                 ],
                 "outbound": "direct"
             },
@@ -153,7 +154,7 @@
                 "HongKong",
                 "Singapore",
                 "Japan",
-                "Taiwan",
+                "TaiWan",
                 "direct-out"
             ]
         },
