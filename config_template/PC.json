@@ -21,6 +21,13 @@
   "route": {
     "rule_set": [
       {
+        "tag": "ai",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://srs.chaimi.cc/ai.srs",
+        "download_detour": "direct"
+      },
+      {
         "tag": "block",
         "type": "remote",
         "format": "binary",
@@ -54,6 +61,13 @@
         "format": "binary",
         "url": "https://srs.chaimi.cc/telegram.srs",
         "download_detour": "direct"
+      },
+      {
+        "tag": "cn-ips",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "download_detour": "proxy"
       }
     ],
     "rules": [
@@ -64,15 +78,21 @@
       {
         "rule_set": [
           "direct",
-          "steam"
+          "steam",
+          "cn-ips"
         ],
         "outbound": "direct"
       },
       {
-        "rule_set": [
-          "telegram",
-          "proxy"
-        ],
+        "rule_set": "ai",
+        "outbound": "ai"
+      },
+      {
+        "rule_set": "telegram",
+        "outbound": "telegram"
+      },
+      {
+        "rule_set": "proxy",
         "outbound": "proxy"
       }
     ],
@@ -101,7 +121,26 @@
       "outbounds": [
         "auto",
         "direct-out",
-        "{all}"
+        "HongKong",
+        "Singapore",
+        "Japan",
+        "Taiwan"
+      ]
+    },
+    {
+      "tag": "ai",
+      "type": "selector",
+      "outbounds": [
+        "proxy",
+        "direct-out"
+      ]
+    },
+    {
+      "tag": "telegram",
+      "type": "selector",
+      "outbounds": [
+        "proxy",
+        "direct-out"
       ]
     },
     {
@@ -121,14 +160,6 @@
         "direct-out",
         "proxy"
       ]
-    },
-    {
-      "tag": "direct-out",
-      "type": "direct"
-    },
-    {
-      "tag": "dns-out",
-      "type": "dns"
     },
     {
       "tag": "HongKong",
@@ -206,19 +237,8 @@
       ]
     },
     {
-      "tag": "Others",
-      "type": "selector",
-      "outbounds": [
-        "{all}"
-      ],
-      "filter": [
-        {
-          "action": "exclude",
-          "keywords": [
-            "🇭🇰|HK|hk|香港 | 香|🇹🇼|TW|tw|台湾 | 台|🇸🇬|SG|sg|新加坡 | 狮|🇯🇵|JP|jp|日本 | 日|🇺🇸|US|us|美国 | 美"
-          ]
-        }
-      ]
+      "tag": "direct-out",
+      "type": "direct"
     }
   ],
   "experimental": {
