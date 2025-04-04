@@ -108,8 +108,7 @@
             {
                 "rule_set": [
                     "direct",
-                    "steam",
-                    "cn-ips"
+                    "steam"
                 ],
                 "outbound": "direct"
             },
